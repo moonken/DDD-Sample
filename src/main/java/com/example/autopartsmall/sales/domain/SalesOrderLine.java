@@ -3,6 +3,7 @@ package com.example.autopartsmall.sales.domain;
 import com.example.autopartsmall.common.ddd.DomainEntity;
 import com.example.autopartsmall.common.support.Default;
 import com.example.autopartsmall.material.domain.MaterialId;
+import com.example.autopartsmall.material.domain.MaterialService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,14 +22,14 @@ public class SalesOrderLine extends DomainEntity<SalesOrderLineId> {
 
     private int quantity;
 
-    public SalesOrderLine(MaterialId materialId, int quantity) {
+    protected SalesOrderLine(MaterialId materialId, int quantity, MaterialService materialService) {
         this.assertMinValue(quantity, 1, "quantity");
+        materialService.validateExist(materialId);
         this.materialId = materialId;
         this.quantity = quantity;
     }
 
-    // TODO 对聚合内实体的操作，入口应放在聚合根
-    public void modifyQuality(int quantity) {
+    protected void modifyQuality(int quantity) {
         this.assertMinValue(quantity, 1, "quantity");
         this.quantity = quantity;
     }
